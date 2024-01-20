@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Upload Success</title>
+    <link rel="stylesheet"  href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body>
+    <div>
+        <nav class='nav'>
+            <span>Math Problem to Image</span>
+        </nav>
+    </div>
+    <h1>Upload Successful</h1>
+    <p>Uploaded file: {{ filename }}</p>
+    <img src="{{ filename }}" alt="Uploaded Image">
+</body>
+</html>
