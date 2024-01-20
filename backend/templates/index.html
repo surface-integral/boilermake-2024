@@ -1,0 +1,66 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Image Upload</title>
+    <link rel="stylesheet"  href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body>
+    <div>
+        <nav class='nav'>
+            <span>Math Problem to Image</span>
+        </nav>
+    </div>
+    <div class="form-div">
+    <h1>Image Upload</h1>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="file"> <br />
+            <input type="submit" value="Upload">
+        </form>
+    </div>
+</body>
+</html>
+
+<!-- <!DOCTYPE html>
+<html>
+    <head>
+        <title>Problem to Image</title>
+        <link rel="stylesheet" href="styles.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    </head>
+
+    <body>
+        <div>
+            <nav class='nav'>
+                <div>
+                    something here
+                </div>
+                <div>
+                    something else here lol
+                </div>
+            </nav>
+        </div>
+
+        <div>
+            <h1>Upload an image with a math problem!</h1> <br />
+            <p>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li>{{message}}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% endwith %}
+            </p>
+            <form method="post" action = "/" enctype="multipart/form-data">
+                <input type="file" name="file">
+                <input type="submit" value="Upload">
+                
+            </form>
+        </div>
+    </body>
+</html>
+ -->

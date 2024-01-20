@@ -16,24 +16,23 @@ body {
     background-color: rgb(100, 149, 237);
     height: 60px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     gap: 40px;
     padding: 0 4rem;
 }
 
-.nav ul {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    display: flex;
-    gap: 1rem;
+.form-div {
+    text-align: center;
+    margin-top: 40px
 }
 
-.nav-item {
-    opacity: 0.6;
-    text-decoration: none;
-    color: black;
-    font-weight: bold;
-    margin: 0.5rem;
+form {
+    display: flex;
+    justify-content: center;
+}
+
+h1 {
+    display: flex;
+    justify-content: center;
 }
