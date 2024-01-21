@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect
+from string_parser import parse_problem, determine_type_add
 import os
 from PIL import Image
 
@@ -44,18 +45,18 @@ def upload_file():
         filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         file.save(filename)
         print("test")
-
+        problem_type = det
         return render_template('image_loaded.html', file=filename)
 
 @app.route("/upload_text", methods=["POST"])
 def upload_text():
     text = request.form['text-input']
     text_prompts.append(text)
-    print(text_prompts)
-    
-    latest_prompt = text_prompts[-1]
-    dataurl = main.entry_point(latest_prompt)
-
+    print(text_prompts[0])
+    problem_type = determine_type_add(text_prompts)
+    parsed_data = parse_problem(text_prompts[0], "Addition", problem_type) 
+    print("subject 1: "+str(parsed_data["Subject1"]))
+    print(parsed_data)
     return render_template('image_loaded.html')
 
 
