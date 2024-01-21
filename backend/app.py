@@ -46,7 +46,7 @@ def upload_text():
     text = request.form['text-input']
     text_prompts.append(text)
     print(text_prompts)
-    return render_template('index.html')
+    return render_template('image_loaded.html')
 
 
 
