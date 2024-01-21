@@ -1,12 +1,10 @@
 from flask import Flask, render_template, request, redirect
-from string_parser import parse_problem, determine_type_add
 import os
 from PIL import Image
 
 import sys
 sys.path.append('/Users/aht_2004/boilermake-2024/')
-import main 
-
+from main import get_question_type, analyze_prompt, generate_image
 
 app = Flask(__name__)
 
@@ -53,9 +51,9 @@ def upload_text():
     text = request.form['text-input']
     text_prompts.append(text)
     print(text_prompts[0])
-    problem_type = determine_type_add(text_prompts)
-    parsed_data = parse_problem(text_prompts[0], "Addition", problem_type) 
-    print("subject 1: "+str(parsed_data["Subject1"]))
+    problem_type = get_question_type(text_prompts)
+    parsed_data = analyze_prompt(text_prompts[0], "Addition", "And") 
+    img = generate_image(parsed_data)
     print(parsed_data)
     return render_template('image_loaded.html')
 

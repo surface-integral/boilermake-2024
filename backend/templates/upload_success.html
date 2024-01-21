@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Upload Success</title>
     <link rel="stylesheet"  href="{{ url_for('static', filename='styles.css') }}" />
+    <link href="/Users/prisoe/boilermake-2024/backend/static/lightbox.css" rel="stylesheet" />
 </head>
 <body>
     <div>
@@ -14,5 +15,6 @@
     <h1>Upload Successful</h1>
     <p>Uploaded file: {{ filename }}</p>
     <img src="{{ file }}" alt="Uploaded Image">
+    <script src="../../backend/js/lightbox-plus-jquery.js"></script>
 </body>
 </html>

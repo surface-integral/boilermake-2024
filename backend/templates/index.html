@@ -1,9 +1,10 @@
-<!doctype html>
+flask <!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <title>Image Upload</title>
     <link rel="stylesheet"  href="{{ url_for('static', filename='styles.css') }}" />
+    <link href="../../backend/static/lightbox.css" rel="stylesheet" />
 </head>
 <body>
     <div class="container">
@@ -19,6 +20,7 @@
                     <textarea name="text-input"></textarea>
                 </label>
                 <button type="submit" class="btn">Submit text</button>
+                <a href="../../backend/temp_img/temp_image.jpg" data-lightbox="image-1" data-title="My caption">Image #1</a>
             </form>
         </div>
         <div class="form-div">
@@ -39,6 +41,7 @@
         <div class="cube"></div>
         
     </div>
+    <script src="../../backend/js/lightbox-plus-jquery.js"></script>
 </body>
 </html>
 
