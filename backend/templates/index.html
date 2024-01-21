@@ -4,7 +4,7 @@ flask <!doctype html>
     <meta charset="utf-8">
     <title>iMAiTHination</title>
     <link rel="stylesheet"  href="{{ url_for('static', filename='styles.css') }}" />
-    <link href="../../backend/static/lightbox.css" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='lightbox.css')}}" rel="stylesheet" />
 </head>
 <body>
     <div class="container">
