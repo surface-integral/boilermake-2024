@@ -2,9 +2,13 @@ from flask import Flask, render_template, request, redirect
 import os
 from PIL import Image
 
+from pathlib import Path
 import sys
-sys.path.append('/Users/aht_2004/boilermake-2024/')
-from main import get_question_type, analyze_prompt, generate_image
+sys.path.append(Path(os.getcwd()))
+
+from main import entry_point
+
+PATH = str(Path(os.getcwd()).parent.absolute())
 
 app = Flask(__name__)
 
@@ -50,11 +54,9 @@ def upload_file():
 def upload_text():
     text = request.form['text-input']
     text_prompts.append(text)
-    print(text_prompts[0])
-    problem_type = get_question_type(text_prompts)
-    parsed_data = analyze_prompt(text_prompts[0], "Addition", "And") 
-    img = generate_image(parsed_data)
-    print(parsed_data)
+    latest_prompt = text_prompts[-1]
+    img = entry_point(latest_prompt)
+    img.save(PATH + "/backend/temp_img/temp_image.jpg")
     return render_template('image_loaded.html')
 
 

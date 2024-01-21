@@ -1,9 +1,9 @@
 from io import BytesIO
+import os
 from base64 import b64encode
 import base64
 from PIL import Image, ImageFont, ImageDraw
 import numpy as np
-import pandas as pd
 
 import pytesseract
 import spacy
@@ -14,8 +14,13 @@ from openai import OpenAI
 IMAGE_WIDTH = 1280
 IMAGE_HEIGHT = 720
 
+from pathlib import Path
+
+PATH = str(Path(os.getcwd()).parent.absolute())
+print(PATH)
+
 def entry_point(prompt: str):
-    output = analyze_prompt(prompt, operation="Addition")
+    output = analyze_prompt(prompt, operation="Addition", problem_type=get_question_type(prompt))
     print(output)
     img = generate_image(output)
     # image_io = BytesIO()
@@ -41,7 +46,7 @@ def generate_subject_image(subject: str,
                            create_variation=False, 
                            vary_img=None, 
                            debug=False) -> Image:
-    client = OpenAI(api_key="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")
+    client = OpenAI(api_key="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")
     
     prompt = "exactly one singular cartoon " + subject
     if debug:
@@ -103,12 +108,15 @@ def create_band(text: str, extra_length=100) -> np.array:
     img = Image.fromarray(whitebg)
     I1 = ImageDraw.Draw(img)
     # Get the correct font size
-    for i in range(32, -1, -1):
-        font = ImageFont.truetype("/Users/prisoe/boilermake-2024/fonts/comic-sans-ms/COMIC.TTF", 28, encoding="unic")
-        text_length = I1.textlength(text=text, font=font)
-        offset = (IMAGE_WIDTH - text_length) // 2
-        if offset < 0:
-            continue
+    # for i in range(32, 0, -1):
+    #     font = ImageFont.truetype(str(PATH) + "/fonts/comic-sans-ms/COMIC.TTF", i, encoding="unic")
+    #     text_length = I1.textlength(text=text, font=font)
+    #     offset = (IMAGE_WIDTH - text_length) // 2
+    #     if offset < 0:
+    #         continue
+    font = ImageFont.truetype(str(PATH) + "/fonts/comic-sans-ms/COMIC.TTF", 28, encoding="unic")
+    text_length = I1.textlength(text=text, font=font)
+    offset = (IMAGE_WIDTH - text_length) // 2
     # Draw in question at the bottom of the image
     I1.text((offset, hh//5), text=text, fill=(0, 0, 0), stroke_width=0, font=font)
     return np.asarray(img)
@@ -145,7 +153,6 @@ def generate_image(data: dict, debug=False):
         
         combined = combine_images_vertically(multiplied1, multiplied2)
         img = add_question_band(combined, data['Question'])
-        img.save("/Users/prisoe/boilermake-2024/backend/temp_img/temp_image.jpg")
         return img
     
     if data['Type'] == "More than":
@@ -238,12 +245,14 @@ def analyze_prompt(question: str, operation: str, problem_type: str):
                                         else: 
                                             output["Quantity2"] = quantity
                                     if ((token.pos_ == "ADJ") and (token.text != "more")): 
-                                        adj = token.text
+                                        adj = token.text + " "
                                     if ((token.pos_ == "NOUN")):   # filter to only nouns 
-                                        subject = adj+" "+token.text
+                                        print(f"Token tag: {token.tag_}")
                                         #Singularize token subjects
                                         if token.tag_ == "NNS":
                                             subject = adj + TextBlob(token.text).words[0].singularize()
+                                        else:
+                                            subject = adj + token.text
                                         if output["Subject1"] == "":
                                             output["Subject1"] = subject
                                         else: 
