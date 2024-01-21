@@ -1,23 +1,23 @@
 # Directions to run locally: 
 
-Setting up the virtual environment: 
-On mac: 
+## Setting up the virtual environment: 
+### On mac: 
 
-'''bash
+```bash
 python -m venv env
 source env/bin/activate
-'''
+```
 
-On windows: 
+### On windows: 
 
-'''bash
+```bash
 python -m venv env
 .\env\Scripts\activate
-'''
+```
 
-Make sure you have the required packages listed on requirements.txt downloaded, then run: 
+## Make sure you have the required packages listed on *requirements.txt* downloaded, then run: 
 
-'''bash 
+```bash 
 flask app --app run
-'''
+```
 
