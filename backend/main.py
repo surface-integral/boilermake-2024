@@ -16,6 +16,8 @@ IMAGE_HEIGHT = 720
 
 from pathlib import Path
 
+api_key = "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"
+
 PATH = str(Path(os.getcwd()).parent.absolute())
 print(PATH)
 
@@ -46,7 +48,7 @@ def generate_subject_image(subject: str,
                            create_variation=False, 
                            vary_img=None, 
                            debug=False) -> Image:
-    client = OpenAI(api_key="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")
+    client = OpenAI(api_key=api_key)
     
     prompt = "exactly one singular cartoon " + subject
     if debug:

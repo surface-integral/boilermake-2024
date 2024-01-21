@@ -55,7 +55,7 @@ def upload_text():
     text_prompts.append(text)
     latest_prompt = text_prompts[-1]
     img = entry_point(latest_prompt)
-    img.save(PATH + "/backend/temp_img/temp_image.jpg")
+    img.save(PATH + "/backend/static/temp_img/temp_image.jpg")
     return render_template('image_loaded.html')
 
 
