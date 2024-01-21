@@ -2,6 +2,29 @@
     box-sizing: border-box;
 }
 
+html {
+    background: rgb(8,8,117);
+    background: linear-gradient(90deg, rgba(8,8,117,1) 7%, rgba(48,79,105,1) 50%, rgba(8,14,117,1) 78%);
+}
+
+h1 {
+    font-family: "Comic Sans MS", "Comic Sans", "cursive";
+    color: white;
+}
+
+span {
+    color: white;
+    font-family: "Comic Sans MS", "Comic Sans", "cursive";
+    font-size: 50px;
+}
+
+#invalid {
+    color: red;
+    font-size: 20px;
+    text-align: center;
+}
+
+
 body {
     margin: 0;
 }
@@ -13,8 +36,8 @@ body {
 
 
 .nav {
-    background-color: rgb(100, 149, 237);
-    height: 60px;
+    /* background-color: #0040C1; */
+    height: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -23,8 +46,11 @@ body {
 }
 
 .form-div {
+    display: flex;
+    flex-direction: column;
     text-align: center;
-    margin-top: 40px
+    margin-top: 40px;
+    padding-bottom: 20px;
 }
 
 form {
@@ -35,4 +61,141 @@ form {
 h1 {
     display: flex;
     justify-content: center;
+}
+
+#form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.file-upload {
+    display: inline;
+    padding: 10px 15px;
+    cursor: pointer;
+    border: inherit;
+    border-radius: 5px;
+    background-color: green;
+    margin-bottom: 30px;
+  }
+  
+  .file-upload span {
+    font-family: "Comic Sans MS", "Comic Sans", "cursive";
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .file-upload input {
+    display: none; /* Hide the actual file input */
+  }
+  
+  /* Style for when the label is hovered */
+  .file-upload:hover {
+    opacity: 0.7;
+    transform: scale(1.2);
+  }
+
+.btn {
+    font-family: "Comic Sans MS", "Comic Sans", "cursive";
+    color: black;
+    border-radius: 20px;
+    border-color: aquamarine;
+    height: 60px;
+    width: 100px;
+}
+
+.btn:hover {
+    cursor: pointer;
+    background-color: lightblue;
+    transform: scale(1.2);
+    margin-bottom: 20px;
+}
+
+@import url("https://fonts.googleapis.com/css?family=Montserrat:700");
+.container {
+/* background-color: rgb(100, 149, 237); */
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  font-family: "Montserrat", sans-serif;
+}
+
+/* .hero__title {
+  color: #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 50px;
+  z-index: 1;
+} */
+
+
+.cube {
+  position: absolute;
+  top: 80vh;
+  left: 45vw;
+  width: 10px;
+  height: 10px;
+  border-left: solid 1px aqua;
+  /* border-left: solid 1px #003298; */
+  transform-origin: top right;
+  transform: scale(0) rotate(0deg) translate(-50%, -50%);
+  -webkit-animation: cube 12s ease-in forwards infinite;
+          animation: cube 12s ease-in forwards infinite;
+}
+.cube:nth-child(2n) {
+  border-color: #0051f4;
+}
+.cube:nth-child(2) {
+  -webkit-animation-delay: 2s;
+          animation-delay: 2s;
+  left: 25vw;
+  top: 40vh;
+}
+.cube:nth-child(3) {
+  -webkit-animation-delay: 4s;
+          animation-delay: 4s;
+  left: 75vw;
+  top: 50vh;
+}
+.cube:nth-child(4) {
+  -webkit-animation-delay: 6s;
+          animation-delay: 6s;
+  left: 90vw;
+  top: 10vh;
+}
+.cube:nth-child(5) {
+  -webkit-animation-delay: 8s;
+          animation-delay: 8s;
+  left: 10vw;
+  top: 85vh;
+}
+.cube:nth-child(6) {
+  -webkit-animation-delay: 10s;
+          animation-delay: 10s;
+  left: 50vw;
+  top: 10vh;
+}
+
+@-webkit-keyframes cube {
+  from {
+    transform: scale(0) rotate(0deg) translate(-50%, -50%);
+    opacity: 1;
+  }
+  to {
+    transform: scale(20) rotate(960deg) translate(-50%, -50%);
+    opacity: 0;
+  }
+}
+
+@keyframes cube {
+  from {
+    transform: scale(0) rotate(0deg) translate(-50%, -50%);
+    opacity: 1;
+  }
+  to {
+    transform: scale(20) rotate(960deg) translate(-50%, -50%);
+    opacity: 0;
+  }
 }

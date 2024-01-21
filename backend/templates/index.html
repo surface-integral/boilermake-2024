@@ -7,18 +7,30 @@
     <link rel="stylesheet"  href="{{ url_for('static', filename='styles.css') }}" />
 </head>
 <body>
+    <div class="container"> 
+        <div>
+            <nav class='nav'>
+                <span><b>Math Problem to Image</b> </span>
+            </nav>
+        </div>
+        <div class="form-div">
+            <h1>Image Upload</h1>
+            <form action="/upload_image" method="post" enctype="multipart/form-data" id="form">
+                <label for="file-input" class="file-upload">
+                    <span style="font-size: 10px;">Choose file</span>
+                    <input type="file" id="file-input" name="file-input">
+                </label>
+                <button type="submit" class="btn">Upload File</button>
+            </form>
+        </div>
+        <div class="cube"></div>
+        <div class="cube"></div>
+        <div class="cube"></div>
+        <div class="cube"></div>
+        <div class="cube"></div>
+        <div class="cube"></div>
     <div>
-        <nav class='nav'>
-            <span>Math Problem to Image</span>
-        </nav>
-    </div>
-    <div class="form-div">
-    <h1>Image Upload</h1>
-        <form action="/upload" method="post" enctype="multipart/form-data">
-            <input type="file" name="file"> <br />
-            <input type="submit" value="Upload">
-        </form>
-    </div>
+    
 </body>
 </html>
 

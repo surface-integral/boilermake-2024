@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Image Upload</title>
+    <link rel="stylesheet"  href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body>
+    <div>
+        <div>
+            <nav class='nav'>
+                <span><b>Math Problem to Image</b></span>
+            </nav>
+        </div>
+        <div class="form-div">
+            <h1>Image Upload</h1>
+            <form action="/upload_image" method="post" enctype="multipart/form-data">
+                <label for="file-input" class="file-upload">
+                    <span style="font-size: 10px;">Choose file</span>
+                    <input type="file" id="file-input" name="file-input">
+                </label>
+                <button type="submit" class="btn">Upload File</button>
+            </form>
+        </div>
+        <div id="invalid">
+            <span style="color: red">No file selected!</span>
+        </div>        
+        
+        <div class="cube"></div>
+        <div class="cube"></div>
+        <div class="cube"></div>
+        <div class="cube"></div>
+        <div class="cube"></div>
+        <div class="cube"></div>
+    </div>
+</body>
+</html>
