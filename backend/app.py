@@ -7,6 +7,8 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 UPLOAD_FOLDER = 'backend/saved_images'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+text_prompts = []
+
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -19,10 +21,10 @@ def index():
 @app.route('/upload_image', methods=['POST'])
 def upload_file():
     # Check if the POST request has a file part
-    if 'file' not in request.files:
+    if 'file-input' not in request.files:
         return render_template('invalid_file.html')
-    
-    file = request.files['file']
+
+    file = request.files['file-input']
 
     if not allowed_file(file.filename):
         return render_template('invalid_file.html')
@@ -37,6 +39,15 @@ def upload_file():
         file.save(filename)
         print(file.filename)
         return render_template('index.html', file=filename)
+
+@app.route("/upload_text", methods=["POST"])
+def upload_text():
+    text = request.form['text-input']
+    text_prompts.append(text)
+    print(text_prompts)
+    return render_template('index.html')
+
+
 
 if __name__ == '__main__':
     # Ensure the 'uploads' folder exists

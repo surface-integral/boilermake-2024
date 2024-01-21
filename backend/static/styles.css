@@ -24,8 +24,9 @@ span {
     text-align: center;
 }
 
-
 body {
+    display: flex;
+    flex-direction: column;
     margin: 0;
 }
 
@@ -36,10 +37,10 @@ body {
 
 
 .nav {
-    /* background-color: #0040C1; */
     height: 100px;
     display: flex;
     justify-content: center;
+    text-align: center;
     align-items: center;
     gap: 40px;
     padding: 0 4rem;
@@ -63,7 +64,7 @@ h1 {
     justify-content: center;
 }
 
-#form {
+.form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -78,6 +79,16 @@ h1 {
     background-color: green;
     margin-bottom: 30px;
   }
+
+.text-input {
+    display: inline;
+    margin: 5px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: blue;
+    margin-bottom: 30px;
+}
   
   .file-upload span {
     font-family: "Comic Sans MS", "Comic Sans", "cursive";
@@ -113,36 +124,24 @@ h1 {
 
 @import url("https://fonts.googleapis.com/css?family=Montserrat:700");
 .container {
-/* background-color: rgb(100, 149, 237); */
-  position: relative;
-  height: 100vh;
-  overflow: hidden;
-  font-family: "Montserrat", sans-serif;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    height: 100vh;
+    overflow: auto;
 }
 
-/* .hero__title {
-  color: #fff;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 50px;
-  z-index: 1;
-} */
-
-
 .cube {
-  position: absolute;
-  top: 80vh;
-  left: 45vw;
-  width: 10px;
-  height: 10px;
-  border-left: solid 1px aqua;
-  /* border-left: solid 1px #003298; */
-  transform-origin: top right;
-  transform: scale(0) rotate(0deg) translate(-50%, -50%);
-  -webkit-animation: cube 12s ease-in forwards infinite;
-          animation: cube 12s ease-in forwards infinite;
+    position: absolute;
+    top: 80vh;
+    left: 45vw;
+    width: 10px;
+    height: 10px;
+    border-left: solid 1px aqua;
+    transform-origin: top right;
+    transform: scale(0) rotate(0deg) translate(-50%, -50%);
+    -webkit-animation: cube 12s ease-in forwards infinite;
+            animation: cube 12s ease-in forwards infinite;
 }
 .cube:nth-child(2n) {
   border-color: #0051f4;
