@@ -47,7 +47,6 @@ def upload_file():
         filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         file.save(filename)
         print("test")
-        problem_type = det
         return render_template('image_loaded.html', file=filename)
 
 @app.route("/upload_text", methods=["POST"])
