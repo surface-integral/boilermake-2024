@@ -1,17 +1,21 @@
-def andrew_function(question, operation, problem_type): 
+import spacy
+from textblob import TextBlob
+def andrew_function(question: str, operation: str, problem_type: str): 
     output = {"Question":"", "Subject1":"", "Quantity1":"", "Subject2":"", "Quantity2":"", "Operation":"", "Type":""}
-    output["Question"] = question
     output["Operation"] = operation
     output["Type"] = problem_type
 
+    NER = spacy.load("en_core_web_sm")
+    
     doc = NER(question)
 
     sents = [] 
     subject = ""
     for sent in doc.sents: 
+
         sents.append(sent)
+    output["Question"] = sents[-1].text
     for sent in sents[:len(sents)-1]:
-        print(sent)
         for token in sent:
             if (("subj" in token.dep_) or ("dobj" in token.dep_)):
                 subtree = list(token.subtree)
@@ -22,7 +26,6 @@ def andrew_function(question, operation, problem_type):
                 contains_noun = [True if "NOUN" == token.pos_ else False for token in doc[start:end]]
                 k = 0 
                 seg1 = doc[start:end]
-                print(seg1)
                 seg2 = ""
                 for token in doc[start:end]:
                     if (token.pos_ == "CCONJ"): 
@@ -42,9 +45,13 @@ def andrew_function(question, operation, problem_type):
                                         #print("second quantity:" +token.text)
                                         output["Quantity2"] = token.text
                                 if ((token.pos_ == "ADJ") and (token.text != "more")): 
-                                    adj = token.text
+                                    adj = token.text + " "
                                 if ((token.pos_ == "NOUN")):   # filter to only nouns 
-                                    subject = adj+" "+token.text
+                                    # Singularize token subjects
+                                    if token.tag_ == "NNS":
+                                        subject = adj + TextBlob(token.text).words[0].singularize()
+                                    else:
+                                        subject = adj + token.text
                                     if output["Subject1"] == "":
                                         #print("first subject:" +subject)
                                         output["Subject1"] = subject

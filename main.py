@@ -5,6 +5,8 @@ import numpy as np
 import pandas as pd
 
 import pytesseract
+import spacy
+from textblob import TextBlob
 
 from openai import OpenAI
 
@@ -16,21 +18,45 @@ def get_text_from_image(filename: str):
     text = pytesseract.image_to_string(img)
     return text
 
-def generate_subject_image(subject: str, filename=None) -> Image:
+def generate_subject_image(subject: str, 
+                           filename=None, 
+                           create_variation=False, 
+                           vary_img=None, 
+                           debug=False) -> Image:
     client = OpenAI(api_key="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")
     
-    prompt = "exactly one smiling cartoon " + subject
-    print(prompt)
-    response = client.images.generate(
-        model="dall-e-2",
-        prompt=prompt,
-        size="512x512",
-        quality="standard",
-        n=1,
-        response_format='b64_json',
-        style="natural"
-    )
-    
+    prompt = "exactly one singular cartoon " + subject
+    if debug:
+        print(prompt)
+    if create_variation:
+        # Converting the image object into bytes array
+        img_byte_arr = BytesIO()
+        vary_img.save(img_byte_arr, format='PNG')
+        vary_img = img_byte_arr.getvalue()
+        
+        if debug:
+            print("Creating a variation...")
+            
+        response = client.images.create_variation(
+            image=vary_img,
+            model="dall-e-2", 
+            size="512x512",
+            n=1,
+            response_format='b64_json',
+        )
+    else:
+        if debug:
+            print("Creating a new image...")
+        response = client.images.generate(
+            model="dall-e-2",
+            prompt=prompt,
+            size="512x512",
+            quality="standard",
+            n=1,
+            response_format='b64_json',
+            style="natural"
+        )
+        
     image_data = response.data[0].b64_json
     
     im_bytes = base64.b64decode(image_data)   # im_bytes is a binary image
@@ -81,31 +107,109 @@ def combine_images_vertically(image1: Image, image2: Image) -> Image:
     newImg = np.concatenate([img1, img2], axis=0)
     return Image.fromarray(newImg)
 
-def generate_image(data: pd.DataFrame):
+def generate_image(data: dict, debug=False):
+    for key in data.keys():
+        data[key] = data[key].strip()
+    
     if data['Type'] == "And":
         # Janet has 5 apples and 6 bananas in her basket. How many fruits does she have in total?
-        subject_img1 = generate_subject_image(data['Subject1'])
-        subject_img2 = generate_subject_image(data['Subject2'])
+        subject_img1 = generate_subject_image(data['Subject1'], debug=debug)
+        if data['Subject1'] == data['Subject2']:
+            subject_img2 = generate_subject_image(data['Subject2'], 
+                                                  create_variation=True, 
+                                                  vary_img=subject_img1, 
+                                                  debug=debug)    
+        else:
+            subject_img2 = generate_subject_image(data['Subject2'], debug=debug)
         
-        multiplied1 = multiply_subject_image(subject_img1, data['Quantity1'])
-        multiplied2 = multiply_subject_image(subject_img2, data['Quantity2'])
+        multiplied1 = multiply_subject_image(subject_img1, mult=int(data['Quantity1']))
+        multiplied2 = multiply_subject_image(subject_img2, mult=int(data['Quantity2']))
         
         combined = combine_images_vertically(multiplied1, multiplied2)
         img = add_question_band(combined, data['Question'])
         return img
-    if data['Type'] == "more":
+    
+    if data['Type'] == "More":
         # Janet has 6 apples more than Ellin. Ellin has 3 apples. How many apples does Janet have?
         subject_img1 = generate_subject_image(data['Subject1'])
-        subject_img1 = multiply_subject_image(subject_img1, mult=data['Quantity1'])
+        if data['Subject1'] == data['Subject2']:
+            subject_img2 = generate_subject_image(data['Subject2'], 
+                                                  create_variation=True, 
+                                                  vary_img=subject_img1, 
+                                                  debug=debug)    
+        else:
+            subject_img2 = generate_subject_image(data['Subject2'])
+            
+        subject_img1 = multiply_subject_image(subject_img1, mult=int(data['Quantity1']))
         subject_img1 = add_question_band(subject_img1, "more than")
         
-        subject_img2 = generate_subject_image(data['Subject2'])
-        subject_img2 = multiply_subject_image(subject_img2, mult=data['Quantity2'])
+        subject_img2 = multiply_subject_image(subject_img2, mult=int(data['Quantity2']))
         
         combined = combine_images_vertically(subject_img1, subject_img2)
-        img = add_question_band(combined, "How many apples does Janet have?")
+        img = add_question_band(combined, data['Question'])
         return img
-        
 
-            
+def andrew_function(question: str, operation: str, problem_type: str): 
+    output = {"Question":"", "Subject1":"", "Quantity1":"", "Subject2":"", "Quantity2":"", "Operation":"", "Type":""}
+    output["Operation"] = operation
+    output["Type"] = problem_type
+
+    NER = spacy.load("en_core_web_sm")
+    
+    doc = NER(question)
+
+    sents = [] 
+    subject = ""
+    for sent in doc.sents: 
+
+        sents.append(sent)
+    output["Question"] = sents[-1].text
+    for sent in sents[:len(sents)-1]:
+        for token in sent:
+            if (("subj" in token.dep_) or ("dobj" in token.dep_)):
+                subtree = list(token.subtree)
+                start = subtree[0].i
+                end = subtree[-1].i + 1
+                adj = ""
+                contains_num = [True if "NUM" == token.pos_ else False for token in doc[start:end]]
+                contains_noun = [True if "NOUN" == token.pos_ else False for token in doc[start:end]]
+                k = 0 
+                seg1 = doc[start:end]
+                seg2 = ""
+                for token in doc[start:end]:
+                    if (token.pos_ == "CCONJ"): 
+                        if True in [True if "NUM" == token.pos_ else False for token in doc[k+1:]]: 
+                            seg1 = doc[start:k]
+                            seg2 = doc[k+1:]
+                    k += 1 
+                for seg in (seg1, seg2): 
+                    if seg: 
+                        if ((True in contains_num) and (True in contains_noun)):
+                            for token in seg[:contains_noun.index(True)+1]:
+                                if (token.pos_ == "NUM"): 
+                                    if output["Quantity1"] == "":
+                                        #print("first quantity:" +token.text)
+                                        output["Quantity1"] = token.text
+                                    else: 
+                                        #print("second quantity:" +token.text)
+                                        output["Quantity2"] = token.text
+                                if ((token.pos_ == "ADJ") and (token.text != "more")): 
+                                    adj = token.text + " "
+                                if ((token.pos_ == "NOUN")):   # filter to only nouns 
+                                    # Singularize token subjects
+                                    if token.tag_ == "NNS":
+                                        subject = adj + TextBlob(token.text).words[0].singularize()
+                                    else:
+                                        subject = adj + token.text
+                                    if output["Subject1"] == "":
+                                        #print("first subject:" +subject)
+                                        output["Subject1"] = subject
+                                    else: 
+                                        #print("second subject:" +subject)
+                                        output["Subject2"] = subject
+                                    adj = ""
+    if output["Subject2"] == "": 
+        output["Subject2"] = subject
+
+    return output 
     
