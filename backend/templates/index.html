@@ -4,7 +4,7 @@ flask <!doctype html>
     <meta charset="utf-8">
     <title>iMAiTHination</title>
     <link rel="stylesheet"  href="{{ url_for('static', filename='styles.css') }}" />
-    <link href="../../backend/static/lightbox.css" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='lightbox.css')}}" rel="stylesheet" />
 </head>
 <body>
     <div class="container">
@@ -20,7 +20,7 @@ flask <!doctype html>
                     <textarea name="text-input"></textarea>
                 </label>
                 <button type="submit" class="btn">Submit text</button>
-                <a href="{{url_for('temp_img', filename='temp_image.jpg')}}" data-lightbox="image-1" data-title="My caption">Image #1</a>
+                <a href="temp_img/temp_image.jpg" data-lightbox="image-1" data-title="My caption">Image #1</a>
             </form>
         </div>
         <div class="form-div">
