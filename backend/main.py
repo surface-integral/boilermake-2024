@@ -16,10 +16,17 @@ IMAGE_HEIGHT = 720
 
 from pathlib import Path
 
-api_key = "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"
+api_key = "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"
 
 PATH = str(Path(os.getcwd()).parent.absolute())
 print(PATH)
+
+def image_entry_point(filename):
+    img = Image.open(filename)
+    img.show()
+    text = pytesseract.image_to_string(img)
+    print(text)
+    return entry_point(text)
 
 def entry_point(prompt: str):
     output = analyze_prompt(prompt, operation="Addition", problem_type=get_question_type(prompt))
@@ -206,7 +213,8 @@ def analyze_prompt(question: str, operation: str, problem_type: str):
                     if not subject:
                         if token2.pos_ == "NOUN":
                             for token3 in doc[end:end+j]:
-                                subject += token3.text+" "
+                                if (token3.text != "more"): 
+                                    subject += token3.text+" "
                             break; 
                 j += 1 
                 quantity = doc[start:end].text
@@ -255,7 +263,7 @@ def analyze_prompt(question: str, operation: str, problem_type: str):
                                         #     subject = adj + TextBlob(token.text).words[0].singularize()
                                         # else:
                                         #     subject = adj + token.text
-                                        subject = adj + token.text
+                                        subject = (adj + token.text).strip()
                                         if subject[-1] == "s":
                                             subject = subject[:-1]
                                         if output["Subject1"] == "":
