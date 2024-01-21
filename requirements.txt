@@ -1,0 +1,9 @@
+Python
+Flask
+Pillow 
+pytesseract
+openai
+spacy
+numpy
+pandas
+textblob
