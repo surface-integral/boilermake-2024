@@ -6,6 +6,7 @@ We have all participated in some form of teaching, whether it be tutoring, volun
 ### Description
 Our application can be split into three parts: reading in data, processing, and generating the image. We allow the user the option to either type in their word problem, or upload a file of the problem. Once the user inputs their data in the desired format, our application will parse the data, and then display an image corresponding to their math word problem. 
 
+## How to use locally
 ### Setting up the virtual environment: 
 #### On mac: 
 
