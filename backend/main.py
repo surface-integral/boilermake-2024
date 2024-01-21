@@ -16,7 +16,7 @@ IMAGE_HEIGHT = 720
 
 from pathlib import Path
 
-api_key = "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"
+api_key = "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"
 
 PATH = str(Path(os.getcwd()).parent.absolute())
 print(PATH)
@@ -251,10 +251,13 @@ def analyze_prompt(question: str, operation: str, problem_type: str):
                                     if ((token.pos_ == "NOUN")):   # filter to only nouns 
                                         print(f"Token tag: {token.tag_}")
                                         #Singularize token subjects
-                                        if token.tag_ == "NNS":
-                                            subject = adj + TextBlob(token.text).words[0].singularize()
-                                        else:
-                                            subject = adj + token.text
+                                        # if token.tag_ == "NNS":
+                                        #     subject = adj + TextBlob(token.text).words[0].singularize()
+                                        # else:
+                                        #     subject = adj + token.text
+                                        subject = adj + token.text
+                                        if subject[-1] == "s":
+                                            subject = subject[:-1]
                                         if output["Subject1"] == "":
                                             output["Subject1"] = subject
                                         else: 
