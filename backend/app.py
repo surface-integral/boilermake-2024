@@ -1,5 +1,11 @@
 from flask import Flask, render_template, request, redirect
 import os
+from PIL import Image
+
+import sys
+sys.path.append('/Users/aht_2004/boilermake-2024/')
+import main 
+
 
 app = Flask(__name__)
 
@@ -46,6 +52,10 @@ def upload_text():
     text = request.form['text-input']
     text_prompts.append(text)
     print(text_prompts)
+    
+    latest_prompt = text_prompts[-1]
+    dataurl = main.entry_point(latest_prompt)
+
     return render_template('image_loaded.html')
 
 

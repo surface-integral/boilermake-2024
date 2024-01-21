@@ -1,4 +1,5 @@
 from io import BytesIO
+from base64 import b64encode
 import base64
 from PIL import Image, ImageFont, ImageDraw
 import numpy as np
@@ -12,6 +13,23 @@ from openai import OpenAI
 
 IMAGE_WIDTH = 1280
 IMAGE_HEIGHT = 720
+
+def entry_point(prompt: str):
+    output = analyze_prompt(prompt, operation="Addition")
+    print(output)
+    img = generate_image(output)
+    # image_io = BytesIO()
+    # img.save(image_io, 'PNG')
+    # dataurl = 'data:image/png;base64,' + b64encode(image_io.getvalue()).decode('ascii')
+    return img
+    
+def get_question_type(question: str):
+    if (('more' in question) | ('than' in question)):
+        return "More than"
+    elif (('and' in question) | ('another' in question) | ('total' in question) | ('altogether' in question)):
+        return "And"
+    else: 
+        return "Original amount"
 
 def get_text_from_image(filename: str):
     img = Image.open(filename)
@@ -129,7 +147,7 @@ def generate_image(data: dict, debug=False):
         img = add_question_band(combined, data['Question'])
         return img
     
-    if data['Type'] == "More":
+    if data['Type'] == "More than":
         # Janet has 6 apples more than Ellin. Ellin has 3 apples. How many apples does Janet have?
         subject_img1 = generate_subject_image(data['Subject1'])
         if data['Subject1'] == data['Subject2']:
@@ -148,11 +166,12 @@ def generate_image(data: dict, debug=False):
         combined = combine_images_vertically(subject_img1, subject_img2)
         img = add_question_band(combined, data['Question'])
         return img
+    
 
-def andrew_function(question: str, operation: str, problem_type: str): 
+def analyze_prompt(question: str, operation: str): 
     output = {"Question":"", "Subject1":"", "Quantity1":"", "Subject2":"", "Quantity2":"", "Operation":"", "Type":""}
     output["Operation"] = operation
-    output["Type"] = problem_type
+    output["Type"] = get_question_type(question)
 
     NER = spacy.load("en_core_web_sm")
     
@@ -161,7 +180,6 @@ def andrew_function(question: str, operation: str, problem_type: str):
     sents = [] 
     subject = ""
     for sent in doc.sents: 
-
         sents.append(sent)
     output["Question"] = sents[-1].text
     for sent in sents[:len(sents)-1]:
@@ -212,4 +230,3 @@ def andrew_function(question: str, operation: str, problem_type: str):
         output["Subject2"] = subject
 
     return output 
-    
